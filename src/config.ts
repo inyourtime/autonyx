@@ -18,10 +18,10 @@ const schema = Type.Object({
 })
 
 export default fp(
-  async (fastify) => {
+  async (app) => {
     const config = envSchema<Static<typeof schema>>({ schema })
 
-    fastify.decorate('config', config)
+    app.decorate('config', config)
   },
   {
     name: '@autonyx/config',
