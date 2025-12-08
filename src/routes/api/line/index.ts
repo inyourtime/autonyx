@@ -14,8 +14,18 @@ export default async function (app: FastifyInstance) {
       if (request.body.events[0].type === 'message') {
         const { message } = request.body.events[0]
         if (message.type === 'image') {
-          const content = await app.blobClient.getMessageContent(message.id)
+          const content = await app.line.blobClient.getMessageContent(message.id)
           await fs.writeFile('image.jpg', content)
+
+          await app.line.client.replyMessage({
+            replyToken: request.body.events[0].replyToken,
+            messages: [
+              {
+                type: 'text',
+                text: 'ok',
+              },
+            ],
+          })
         }
       }
 
